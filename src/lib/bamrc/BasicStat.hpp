@@ -2,7 +2,7 @@
 
 #include <ostream>
 #include <vector>
-#include "sam.h"
+#include "htslib/sam.h"
 
 class BasicStat {
     public:

@@ -2,16 +2,38 @@ cmake_minimum_required(VERSION 2.8)
 
 project(bamrc)
 
-set(SOURCES
-    ReadWarnings.hpp
-    auxfields.hpp
-    BasicStat.hpp
-    BasicStat.cpp
-    IndelQueueEntry.hpp
-    IndelQueueEntry.cpp
-    IndelQueue.hpp
-    IndelQueue.cpp
-)
+set(HEADERS
+        ReadWarnings.hpp
+        BasicStat.hpp
+        auxfields.hpp
+        IndelQueueEntry.hpp
+        IndelQueue.hpp
+        )
 
-xadd_library(bamrc ${SOURCES})
-target_link_libraries(bamrc ${Boost_LIBRARIES} ${Samtools_LIBRARIES} ${ZLIB_LIBRARIES})
+set(SOURCES
+        BasicStat.cpp
+        IndelQueueEntry.cpp
+        IndelQueue.cpp
+        )
+
+#xadd_library(bamrc ${SOURCES})
+add_library(bamrc SHARED ${HEADERS} ${SOURCES})
+
+add_dependencies(bamrc htslib)
+
+set_target_properties(bamrc
+        PROPERTIES
+        PUBLIC_HEADER ${HEADERS}
+        )
+
+target_include_directories(bamrc
+        PUBLIC
+        ${htslib_INCLUDE_DIR}
+        )
+
+target_link_libraries(bamrc ${Boost_LIBRARIES} ${htslib_LIBRARIES})
+
+install(TARGETS bamrc
+        LIBRARY DESTINATION lib
+        PUBLIC_HEADER DESTINATION include/bamrc
+        )

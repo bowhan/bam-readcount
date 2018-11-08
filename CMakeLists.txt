@@ -2,14 +2,14 @@ cmake_minimum_required(VERSION 2.8.3)
 
 project(bam-readcount)
 
-if(NOT CMAKE_INSTALL_PREFIX)
+if (NOT CMAKE_INSTALL_PREFIX)
     set(CMAKE_INSTALL_PREFIX "/usr")
-endif()
+endif ()
 
 set(CMAKE_MODULE_PATH
-    ${CMAKE_SOURCE_DIR}/cmake
-    ${CMAKE_SOURCE_DIR}/build-common/cmake
-)
+        ${CMAKE_SOURCE_DIR}/cmake
+        ${CMAKE_SOURCE_DIR}/build-common/cmake
+        )
 
 include(TestHelper)
 include(VersionHelper)
@@ -22,25 +22,25 @@ PreDependsInit()
 configure_file(version/version.h.in version/version.h @ONLY)
 include_directories(${PROJECT_BINARY_DIR}/version)
 
-#set(REQUIRED_BOOST_LIBS program_options regex)
 find_package(Boost COMPONENTS system program_options regex)
-if(NOT Boost_FOUND)
+if (NOT Boost_FOUND)
+    set(REQUIRED_BOOST_LIBS program_options regex)
     include(BuildBoost)
-endif()
-include_directories(${Boost_INCLUDE_DIRS})
+endif ()
+#include_directories(${Boost_INCLUDE_DIRS})  # avoid using include_directories
 
 include(BuildHtslib)
-include_directories(${htslib_LIBRARIES})
+#include_directories(${htslib_LIBRARIES})  # avoid using include_directories
 
-if(${CMAKE_CXX_COMPILER_ID} MATCHES "GNU|Clang")
+if (${CMAKE_CXX_COMPILER_ID} MATCHES "GNU|Clang")
     set(CMAKE_CXX_FLAGS "-Wall -std=c++0x")
 endif ()
 
 find_package(Threads)
-link_libraries(${CMAKE_THREAD_LIBS_INIT})
+#link_libraries(${CMAKE_THREAD_LIBS_INIT})  # avoid using link_libraries
 
 # make sure to pick up headers from library dirs
-include_directories("src/lib")
+#include_directories("src/lib")  # avoid using include_directories
 
 # main project
 
@@ -50,15 +50,17 @@ add_projects(src/exe)
 
 ###########################################################################
 ## Testing
-set(TEST_DATA_DIRECTORY ${CMAKE_SOURCE_DIR}/test-data)
+option(build_test "build tests" FALSE)
+if (build_test)
+    set(TEST_DATA_DIRECTORY ${CMAKE_SOURCE_DIR}/test-data)
 
-set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/test-bin)
-enable_testing(true)
-add_projects(test/lib)
+    set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/test-bin)
+    enable_testing(true)
+    add_projects(test/lib)
 
-# integration testing
-add_subdirectory(integration-test)
-
+    # integration testing
+    add_subdirectory(integration-test)
+endif ()
 ###########################################################################
 ## Packaging
 include(PackageInfo.cmake)

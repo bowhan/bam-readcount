@@ -1,4 +1,4 @@
-#include "bamrc/IndelQueue.hpp"
+#include "IndelQueue.hpp"
 
 int IndelQueue::process(uint32_t tid, uint32_t pos, std::ostream& stream) {
     int extra_depth = 0;

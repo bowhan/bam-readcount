@@ -1,7 +1,7 @@
 #pragma once
 
-#include "bamrc/BasicStat.hpp"
-#include "bamrc/IndelQueueEntry.hpp"
+#include "BasicStat.hpp"
+#include "IndelQueueEntry.hpp"
 
 #include <queue>
 #include <ostream>

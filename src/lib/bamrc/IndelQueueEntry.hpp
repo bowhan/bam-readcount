@@ -1,6 +1,6 @@
 #pragma once
 
-#include "bamrc/BasicStat.hpp"
+#include "BasicStat.hpp"
 
 #include <string>
 #include <ostream>

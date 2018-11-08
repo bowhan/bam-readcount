@@ -1,4 +1,4 @@
-#include "bamrc/IndelQueueEntry.hpp"
+#include "IndelQueueEntry.hpp"
 
 std::ostream& operator<<(std::ostream& s, const IndelQueueEntry& entry) { 
     s << entry.allele;
