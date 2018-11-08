@@ -6,7 +6,7 @@ if(NOT CMAKE_INSTALL_PREFIX)
     set(CMAKE_INSTALL_PREFIX "/usr")
 endif()
 
-set(CMAKE_MODULE_PATH 
+set(CMAKE_MODULE_PATH
     ${CMAKE_SOURCE_DIR}/cmake
     ${CMAKE_SOURCE_DIR}/build-common/cmake
 )
@@ -22,12 +22,15 @@ PreDependsInit()
 configure_file(version/version.h.in version/version.h @ONLY)
 include_directories(${PROJECT_BINARY_DIR}/version)
 
-set(REQUIRED_BOOST_LIBS program_options regex)
-include(BuildBoost)
+#set(REQUIRED_BOOST_LIBS program_options regex)
+find_package(Boost COMPONENTS system program_options regex)
+if(NOT Boost_FOUND)
+    include(BuildBoost)
+endif()
 include_directories(${Boost_INCLUDE_DIRS})
 
-include(BuildSamtools)
-include_directories(${Samtools_INCLUDE_DIRS})
+include(BuildHtslib)
+include_directories(${htslib_LIBRARIES})
 
 if(${CMAKE_CXX_COMPILER_ID} MATCHES "GNU|Clang")
     set(CMAKE_CXX_FLAGS "-Wall -std=c++0x")
