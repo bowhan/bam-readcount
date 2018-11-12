@@ -7,6 +7,10 @@
 #include <memory>
 #include <cmath>
 
+namespace {
+std::auto_ptr<ReadWarnings> WARN;
+}
+
 BasicStat::BasicStat(bool is_indel)
     : read_count(0)
     , sum_map_qualities(0)
@@ -71,7 +75,7 @@ void BasicStat::process_read(bam_pileup1_t const* base) {
 
     }
     else {
-        WARN->warn(ReadWarnings::Zm_TAG_MISSING, bam1_qname(base->b));
+        WARN->warn(ReadWarnings::Zm_TAG_MISSING, bam_get_qname(base->b));
     }
 
     //grab the single ended mapping qualities for testing
@@ -82,7 +86,7 @@ void BasicStat::process_read(bam_pileup1_t const* base) {
             sum_single_ended_map_qualities += single_ended_map_qual;
         }
         else {
-            WARN->warn(ReadWarnings::SM_TAG_MISSING, bam1_qname(base->b));
+            WARN->warn(ReadWarnings::SM_TAG_MISSING, bam_get_qname(base->b));
         }
     }
     else {
@@ -97,11 +101,11 @@ void BasicStat::process_read(bam_pileup1_t const* base) {
         sum_number_of_mismatches += number_mismatches / (float) clipped_length;
     }
     else {
-        WARN->warn(ReadWarnings::NM_TAG_MISSING, bam1_qname(base->b));
+        WARN->warn(ReadWarnings::NM_TAG_MISSING, bam_get_qname(base->b));
     }
     mapping_qualities.push_back(static_cast<unsigned int>(base->b->core.qual));
     if(!is_indel) {
-        sum_base_qualities += bam1_qual(base->b)[base->qpos];
+        sum_base_qualities += bam_get_qual(base->b)[base->qpos];
     }
 
 }

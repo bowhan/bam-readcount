@@ -57,4 +57,4 @@ private:
 };
 
 
-extern std::auto_ptr<ReadWarnings> WARN;
+//extern std::auto_ptr<ReadWarnings> WARN;

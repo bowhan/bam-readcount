@@ -13,10 +13,10 @@
 #include <stdio.h>
 #include <memory>
 #include <string.h>
-#include "sam.h"
-#include "faidx.h"
-#include "khash.h"
-#include "sam_header.h"
+#include "htslib/sam.h"
+#include "htslib/faidx.h"
+#include "htslib/khash.h"
+//#include "sam_header.h"
 #include <stdio.h>
 #include <unistd.h>
 #include <fstream>
@@ -76,7 +76,9 @@ typedef struct {
     bam_plbuf_t* pileup_buffer;
 } fetch_data_t;
 
-std::auto_ptr<ReadWarnings> WARN;
+namespace {
+    std::auto_ptr<ReadWarnings> WARN;
+}
 
 static inline void load_reference(pileup_data_t* data, int ref) {
     if (data->fai && ref != data->tid) {

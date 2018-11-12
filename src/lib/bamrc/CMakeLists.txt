@@ -16,7 +16,6 @@ set(SOURCES
         IndelQueue.cpp
         )
 
-#xadd_library(bamrc ${SOURCES})
 add_library(bamrc SHARED ${HEADERS} ${SOURCES})
 
 add_dependencies(bamrc htslib)
@@ -28,10 +27,14 @@ set_target_properties(bamrc
 
 target_include_directories(bamrc
         PUBLIC
+        ${Boost_INCLUDE_DIRS}
         ${htslib_INCLUDE_DIR}
         )
 
-target_link_libraries(bamrc ${Boost_LIBRARIES} ${htslib_LIBRARIES})
+target_link_libraries(bamrc
+        ${Boost_LIBRARIES}
+        ${htslib_LIBRARIES}
+        )
 
 install(TARGETS bamrc
         LIBRARY DESTINATION lib
